@@ -1,0 +1,33 @@
+/* style.css */
+
+/* Global styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ... resten av koden är samma ... */
+
+/* Canvas container with important size rules */
+.canvas-container {
+    text-align: center;
+    padding: 1rem;
+    background: #f0e4d2;
+    border-radius: 15px;
+    margin: 2rem 0;
+    min-height: 200px;
+    border: 2px dashed #b38b5d;
+}
+
+/* IMPORTANT: Canvas responsiveness */
+#imageCanvas {
+    max-width: 100%;        /* Width limited by container */
+    max-height: 80vh;       /* Height limited to 80% of window height */
+    width: auto;            /* Maintain proportions */
+    height: auto;           /* Maintain proportions */
+    display: inline-block;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    background: #ffffff;
+}
