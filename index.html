@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Value Tool – Simplify Tones for Painting</title>
+    
+    <meta name="description" content="Free tool for artists to simplify reference photos into clear value scales. Ideal for watercolor sketches and value studies.">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: right; margin-bottom: 1rem;">
+            <a href="valorer.html" style="text-decoration: none; font-size: 0.9rem;">🇸🇪 Svenska</a>
+        </div>
+
+        <h1>🎨 Value Tool – Find the right tones</h1>
+        <p class="subtitle">Simplify your reference image into few values – perfect for watercolor sketches</p>
+        
+        <div class="upload-section">
+            <label for="imageInput" class="upload-label">
+                📁 Choose a reference image
+                <input type="file" id="imageInput" accept="image/*">
+            </label>
+        </div>
+        
+        <div class="control-section">
+            <label for="levels">Number of values: <span id="levelValue">3</span></label>
+            <input type="range" id="levels" min="2" max="8" value="3" step="1">
+            <p class="tip">💡 Tip: 3 values are best for finding big shapes. 5-8 values provide more detail.</p>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="imageCanvas"></canvas>
+        </div>
+        
+        <button id="downloadBtn" style="display: none;">⬇️ Download Value Image</button>
+        
+        <div class="info-text" style="margin-top: 2rem; padding: 1rem; background: #faf5ec; border-radius: 12px;">
+            <h3>📖 About Values</h3>
+            <p>Values are the levels of lightness in an image. By simplifying an image into just a few values, you can see the essential shapes and contrasts more clearly. This is a perfect foundation for watercolor sketches where you want to plan light and dark areas.</p>
+        </div>
+    </div>
+    
+    <script src="values.js"></script>
+</body>
+</html>
