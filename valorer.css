@@ -1,33 +1,192 @@
-/* style.css */
-
-/* Global styles */
+/* Global Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* ... resten av koden är samma ... */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Keeping your dark background for contrast */
+    background: linear-gradient(135deg, #2c1e12 0%, #1a120b 100%);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    color: #f5f0e6; /* Global light text color */
+}
 
-/* Canvas container with important size rules */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    /* Main content area stays light for readability */
+    background: rgba(255, 250, 240, 0.98);
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    color: #3a2c1b; /* Dark text inside the light container */
+}
+
+/* Header Section - Now White/Light for dark backgrounds */
+h1 {
+    font-size: 2.5rem;
+    color: #ffffff; /* Clear white for the main title */
+    margin-bottom: 0.5rem;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.subtitle {
+    text-align: center;
+    color: #d4b68a; /* Light beige for the subtitle */
+    margin-bottom: 2.5rem;
+    font-style: italic;
+    font-size: 1.1rem;
+}
+
+/* Upload Section */
+.upload-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.upload-label {
+    display: inline-block;
+    padding: 1.2rem 2.5rem;
+    background: #b38b5d;
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(179, 139, 93, 0.3);
+}
+
+.upload-label:hover {
+    background: #9c7347;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(179, 139, 93, 0.4);
+}
+
+.upload-label input {
+    display: none;
+}
+
+/* Controls */
+.control-section {
+    background: #faf5ec;
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    border: 1px solid #d4b68a;
+}
+
+.control-section label {
+    font-weight: 700;
+    color: #5e3a1c;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+#levels {
+    width: 100%;
+    margin: 1rem 0;
+    cursor: pointer;
+}
+
+.tip {
+    color: #7d5e3a;
+    font-style: italic;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* Canvas Display */
 .canvas-container {
     text-align: center;
-    padding: 1rem;
-    background: #f0e4d2;
+    padding: 1.5rem;
+    background: #ede0cc;
     border-radius: 15px;
     margin: 2rem 0;
     min-height: 200px;
     border: 2px dashed #b38b5d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* IMPORTANT: Canvas responsiveness */
 #imageCanvas {
-    max-width: 100%;        /* Width limited by container */
-    max-height: 80vh;       /* Height limited to 80% of window height */
-    width: auto;            /* Maintain proportions */
-    height: auto;           /* Maintain proportions */
-    display: inline-block;
+    max-width: 100%;
+    max-height: 75vh;
+    width: auto;
+    height: auto;
+    display: block;
     border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     background: #ffffff;
+}
+
+/* Buttons */
+#downloadBtn {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 1.5rem auto;
+    padding: 1.2rem;
+    background: #5e3a1c;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#downloadBtn:hover {
+    background: #3a2c1b;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Info Box */
+.info-text {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #ffffff;
+    border-radius: 15px;
+    border-left: 5px solid #b38b5d;
+}
+
+.info-text h3 {
+    color: #5e3a1c;
+    margin-bottom: 0.5rem;
+}
+
+.info-text p {
+    line-height: 1.6;
+    color: #4a3a2a;
+}
+
+/* Language Switcher Link */
+a {
+    color: #d4b68a;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #ffffff;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .container {
+        padding: 1.5rem 1rem;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    #imageCanvas {
+        max-height: 60vh;
+    }
 }
