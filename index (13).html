@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Value Study Tool – akvarellskiss.se</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --parchment:#ede5d0;
+    --warm-mid: #c8b89a;
+    --brown: #6b4f35;
+    --dark: #3a2a1a;
+    --accent: #8b6340;
+    --shadow: rgba(58,42,26,0.15);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--cream);
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    color: var(--dark);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(200,184,154,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(139,99,64,0.15) 0%, transparent 60%);
+  }
+  header {
+    text-align: center;
+    padding: 28px 20px 18px;
+    border-bottom: 1px solid var(--warm-mid);
+    background: linear-gradient(180deg, var(--parchment) 0%, transparent 100%);
+  }
+  .brand {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(13px, 3.5vw, 16px);
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 6vw, 34px);
+    font-weight: 600;
+    color: var(--dark);
+    margin: 6px 0 4px;
+    line-height: 1.2;
+  }
+  header p {
+    font-size: clamp(12px, 3vw, 14px);
+    color: var(--brown);
+    font-style: italic;
+    letter-spacing: 0.04em;
+  }
+  main {
+    max-width: 680px;
+    margin: 30px auto 40px;
+    padding: 0 16px;
+  }
+  .card {
+    background: var(--parchment);
+    border-radius: 16px;
+    padding: 28px 24px;
+    box-shadow: 0 4px 24px var(--shadow), 0 1px 0 rgba(255,255,255,0.6) inset;
+    border: 1px solid rgba(200,184,154,0.6);
+  }
+  .upload-zone {
+    border: 2px dashed var(--warm-mid);
+    border-radius: 12px;
+    padding: 36px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    background: rgba(245,240,232,0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--brown);
+    background: rgba(200,184,154,0.2);
+  }
+  .upload-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+  .upload-icon { font-size: 40px; display: block; margin-bottom: 10px; opacity: 0.7; }
+  .upload-zone p { font-size: 15px; color: var(--brown); font-weight: 400; }
+  .upload-zone small { font-size: 12px; color: var(--warm-mid); display: block; margin-top: 6px; }
+  .controls {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .controls label {
+    font-weight: 700;
+    color: var(--brown);
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+  .controls input[type="range"] {
+    flex: 1;
+    min-width: 120px;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, var(--brown) 0%, var(--brown) var(--pct,50%), var(--warm-mid) var(--pct,50%), var(--warm-mid) 100%);
+    outline: none;
+    cursor: pointer;
+  }
+  .controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--brown);
+    box-shadow: 0 2px 6px var(--shadow);
+    transition: transform 0.1s;
+  }
+  .controls input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.2); }
+  .value-badge {
+    background: var(--brown);
+    color: var(--cream);
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 600;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+  .canvas-wrapper {
+    margin-top: 24px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.4);
+    border: 1px solid var(--warm-mid);
+    min-height: 200px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .canvas-placeholder { text-align: center; color: var(--warm-mid); padding: 40px 20px; }
+  .canvas-placeholder span { font-size: 48px; display: block; margin-bottom: 10px; opacity: 0.5; }
+  .canvas-placeholder p { font-size: 13px; font-style: italic; }
+  #imageCanvas { display: none; max-width: 100%; height: auto; border-radius: 10px; }
+  .spinner {
+    display: none;
+    width: 36px; height: 36px;
+    border: 3px solid var(--warm-mid);
+    border-top-color: var(--brown);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    position: absolute;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .btn-row { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700; font-size: 13px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 12px 22px; border-radius: 30px; border: none; cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .btn:active { transform: scale(0.96); }
+  .btn-primary { background: var(--brown); color: var(--cream); box-shadow: 0 3px 12px var(--shadow); }
+  .btn-primary:hover { box-shadow: 0 5px 18px var(--shadow); transform: translateY(-1px); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .hint {
+    margin-top: 20px; padding: 14px 18px;
+    border-left: 3px solid var(--warm-mid);
+    font-size: 13px; color: var(--brown); font-style: italic; line-height: 1.6;
+    background: rgba(245,240,232,0.5); border-radius: 0 8px 8px 0;
+  }
+  footer { text-align: center; padding: 20px; font-size: 12px; color: var(--warm-mid); letter-spacing: 0.05em; }
+  footer a { color: var(--accent); text-decoration: none; }
+  @media (max-width: 480px) {
+    .card { padding: 20px 16px; }
+    .controls { gap: 10px; }
+    .btn { padding: 11px 16px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">www.akvarellskiss.se</div>
+  <h1>Value Study Tool</h1>
+  <p>Simplify your reference into essential tones</p>
+</header>
+<main>
+  <div class="card">
+    <div class="upload-zone" id="dropZone">
+      <input type="file" id="imageInput" accept="image/*">
+      <span class="upload-icon">🖼️</span>
+      <p>Tap to choose a photo</p>
+      <small>Works with camera photos &amp; downloaded images</small>
+    </div>
+    <div class="controls">
+      <label for="levels">Values</label>
+      <input type="range" id="levels" min="2" max="10" value="3">
+      <div class="value-badge" id="levelValue">3</div>
+    </div>
+    <div class="canvas-wrapper" id="canvasWrapper">
+      <div class="canvas-placeholder" id="placeholder">
+        <span>🎨</span>
+        <p>Your value study will appear here</p>
+      </div>
+      <div class="spinner" id="spinner"></div>
+      <canvas id="imageCanvas"></canvas>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="downloadBtn" disabled>⬇ Download</button>
+    </div>
+    <div class="hint">
+      💡 <strong>3 values</strong> – great for finding big shapes and composition.<br>
+      <strong>5–8 values</strong> – more nuance and tonal variation.
+    </div>
+  </div>
+</main>
+<footer>
+  <a href="https://www.akvarellskiss.se">www.akvarellskiss.se</a>
+</footer>
+
+<script>
+let correctedCanvas = null;
+const canvas      = document.getElementById('imageCanvas');
+const ctx         = canvas.getContext('2d');
+const levelInput  = document.getElementById('levels');
+const levelBadge  = document.getElementById('levelValue');
+const spinner     = document.getElementById('spinner');
+const placeholder = document.getElementById('placeholder');
+const downloadBtn = document.getElementById('downloadBtn');
+
+// ── Slider ────────────────────────────────────
+function updateSlider() {
+  const v   = levelInput.value;
+  const min = parseInt(levelInput.min);
+  const max = parseInt(levelInput.max);
+  const pct = ((v - min) / (max - min)) * 100;
+  levelInput.style.setProperty('--pct', pct + '%');
+  levelBadge.textContent = v;
+  if (correctedCanvas) processImage();
+}
+levelInput.addEventListener('input', updateSlider);
+updateSlider();
+
+// ── File input ────────────────────────────────
+document.getElementById('imageInput').addEventListener('change', e => {
+  if (e.target.files[0]) handleFile(e.target.files[0]);
+});
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) handleFile(f);
+});
+
+// ── Handle file ───────────────────────────────
+async function handleFile(file) {
+  // HEIC/HEIF – browsers cannot decode this format
+  const name = file.name.toLowerCase();
+  if (file.type === 'image/heic' || file.type === 'image/heif' ||
+      name.endsWith('.heic') || name.endsWith('.heif')) {
+    alert(
+      '⚠️ HEIC/HEIF format is not supported by browsers.\n\n' +
+      'Please change your camera settings to save as JPEG:\n' +
+      '• Samsung: Camera → Settings → Picture format → JPEG\n' +
+      '• iPhone: Settings → Camera → Formats → Most Compatible'
+    );
+    return;
+  }
+
+  showSpinner(true);
+  try {
+    // createImageBitmap: handles EXIF rotation natively, memory-efficient on Android
+    const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+    correctedCanvas = resizeToMax(bitmap, 2000);
+    bitmap.close();
+    processImage();
+  } catch (err) {
+    // Fallback for older browsers
+    console.warn('createImageBitmap failed, using fallback', err);
+    try {
+      const dataUrl = await readFileAsDataURL(file);
+      const img     = await loadImage(dataUrl);
+      correctedCanvas = resizeToMax(img, 2000);
+      processImage();
+    } catch (err2) {
+      console.error(err2);
+      showSpinner(false);
+      alert('Could not load the image. Please try another file.');
+    }
+  }
+}
+
+// ── Resize to max dimension ───────────────────
+function resizeToMax(src, maxPx) {
+  const w = src.width, h = src.height;
+  const scale = (w > maxPx || h > maxPx) ? maxPx / Math.max(w, h) : 1;
+  const oc = document.createElement('canvas');
+  oc.width  = Math.round(w * scale);
+  oc.height = Math.round(h * scale);
+  oc.getContext('2d').drawImage(src, 0, 0, oc.width, oc.height);
+  return oc;
+}
+
+// ── Process value study ───────────────────────
+function processImage() {
+  if (!correctedCanvas) return;
+  const levels    = parseInt(levelInput.value);
+  canvas.width    = correctedCanvas.width;
+  canvas.height   = correctedCanvas.height;
+  ctx.drawImage(correctedCanvas, 0, 0);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data      = imageData.data;
+  const levelSize = 256 / levels;
+  for (let i = 0; i < data.length; i += 4) {
+    const gray      = 0.299 * data[i] + 0.587 * data[i+1] + 0.114 * data[i+2];
+    const quantized = Math.floor(gray / levelSize) * levelSize + levelSize / 2;
+    data[i] = data[i+1] = data[i+2] = Math.round(quantized);
+  }
+  ctx.putImageData(imageData, 0, 0);
+  showSpinner(false);
+  placeholder.style.display = 'none';
+  canvas.style.display      = 'block';
+  downloadBtn.disabled      = false;
+}
+
+// ── Download ──────────────────────────────────
+downloadBtn.addEventListener('click', () => {
+  const link    = document.createElement('a');
+  link.download = 'value-study.png';
+  link.href     = canvas.toDataURL('image/png');
+  link.click();
+});
+
+// ── Helpers ───────────────────────────────────
+function showSpinner(on) { spinner.style.display = on ? 'block' : 'none'; }
+
+function readFileAsDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload  = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+</script>
+</body>
+</html>
